@@ -3,6 +3,7 @@ import importlib
 import sys
 
 REQUIRED_MODULES = ["googleapiclient.discovery", "simpleaudio", "dotenv", "tqdm"]
+YOUTUBE_KEY = ""
 
 for module in REQUIRED_MODULES:
     try:
@@ -23,12 +24,34 @@ import tqdm
 
 print("All modules imported successfully.")
 
-denv.load_dotenv()
-YOUTUBE_KEY = os.getenv("YOUTUBE_KEY")
+flogin = None
 
-if YOUTUBE_KEY is None:
-    raise ValueError("YOUTUBE_KEY not found in environment variables. Please refer to the README for setup instructions.")
+if os.path.exists(f"data/{os.getlogin()}.txt"):
+    with open(f"data/{os.getlogin()}.txt", "r") as configfile:
+        lines = configfile.readlines()
+        flogin = lines[0].strip()
+else:
+    with open(f"data/{os.getlogin()}.txt", "w") as configfile:
+        configfile.write("False")
+
+if flogin == "False":
+    with open(".env", "w") as envfile:
+        envfile.write("YOUTUBE_KEY=")
+        print("Please set your YOUTUBE_KEY in the .env file created. Refer to the README for setup instructions.")
+        input("Press Enter after updating the .env file...")
+        try:
+            denv.load_dotenv()
+            YOUTUBE_KEY = os.getenv("YOUTUBE_KEY")
+            if not YOUTUBE_KEY:
+                raise ValueError("YOUTUBE_KEY not set.")
+        except ValueError as e:
+            sys.exit(f"Error loading YOUTUBE_KEY: {e}")
+        else:
+            with open(f"data/{os.getlogin()}.txt", "w") as configfile:
+                configfile.write("True")
+elif flogin == "True":
+    denv.load_dotenv()
+    YOUTUBE_KEY = os.getenv("YOUTUBE_KEY")
 
 yAPI = google_build("youtube", "v3", developerKey=YOUTUBE_KEY)
 print("YouTube API client initialized successfully.")
-
