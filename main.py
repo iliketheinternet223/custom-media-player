@@ -2,7 +2,7 @@ import os
 import importlib
 import sys
 
-REQUIRED_MODULES = ["googleapiclient.discovery", "simpleaudio", "dotenv", "tqdm"]
+REQUIRED_MODULES = ["googleapiclient.discovery", "simpleaudio", "dotenv", "tqdm", "yt_dlp"]
 YOUTUBE_KEY = ""
 
 for module in REQUIRED_MODULES:
@@ -21,6 +21,7 @@ from googleapiclient.discovery import build as google_build
 import simpleaudio as sa
 import dotenv as denv
 import tqdm
+import yt_dlp
 
 print("All modules imported successfully.")
 
@@ -53,5 +54,21 @@ elif flogin == "True":
     denv.load_dotenv()
     YOUTUBE_KEY = os.getenv("YOUTUBE_KEY")
 
+
 yAPI = google_build("youtube", "v3", developerKey=YOUTUBE_KEY)
 print("YouTube API client initialized successfully.")
+print("================================")
+print("Type playlist link")
+i=input("> ")
+
+ydl_opts = {
+    'outtmpl': 'data/%(playlist_title)s/%(title)s.%(ext)s',
+    'format': 'bestaudio/best',
+    'noplaylist': False,   # ensures full playlist is downloaded
+    'quiet': True,
+    'no_warnings': True
+}
+
+with yt_dlp.YoutubeDL(ydl_opts) as ydl: # type: ignore
+    ydl.download([i])
+print("Download completed successfully.")
