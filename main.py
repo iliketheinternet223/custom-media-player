@@ -62,7 +62,7 @@ print("Type playlist link")
 i=input("> ")
 
 ydl_opts = {
-    'outtmpl': 'data/%(playlist_title)s/%(title)s.%(ext)s',
+    'outtmpl': 'data/playlists/%(playlist_title)s/%(title)s.%(ext)s',
     'format': 'bestaudio/best',
     'noplaylist': False,   # ensures full playlist is downloaded
     'quiet': True,
