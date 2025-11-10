@@ -62,10 +62,10 @@ print("YouTube API client initialized successfully.")
 print("================================")
 print("Type playlist link")
 i=input("> ")
-
+filetype = input("Type desired filetype (mp3/mp4, etc): ").lower()
 ydl_opts = {
     'outtmpl': 'data/playlists/%(playlist_title)s/%(title)s.%(ext)s',
-    'format': 'bestaudio/best',
+    "format": "best[ext=mp4][vcodec!*=av01]/best", 
     'noplaylist': False,   # ensures full playlist is downloaded
     'quiet': True,
     'no_warnings': True
@@ -80,9 +80,9 @@ print("Download completed successfully.")
 os.system("cls" if os.name == "nt" else "clear")
 title = yAPI.playlists().list(part="snippet,contentDetails",id=playlist_id).execute()["items"][0]["snippet"]["title"]
 for file in os.listdir(f"data/playlists/{title}/"):
-    if file.endswith(".webm"):
+    if file.endswith(".mp4"):
         input_path = f"data/playlists/{title}/{file}"
-        output_path = f"data/playlists/{title}/{os.path.splitext(file)[0]}.mp3"
+        output_path = f"data/playlists/{title}/{os.path.splitext(file)[0]}.{filetype}"
         AudioFileClip(input_path).write_audiofile(output_path, codec="mp3", verbose=False, logger=None)
         os.remove(input_path)
-print("Conversion to MP3 completed successfully.")
+print(f"Conversion to {filetype} completed successfully.")
