@@ -3,7 +3,7 @@ import importlib
 import sys
 os.system("cls" if os.name == "nt" else "clear")
 
-REQUIRED_MODULES = ["googleapiclient.discovery", "simpleaudio", "dotenv", "tqdm", "yt_dlp", "pydub"]
+REQUIRED_MODULES = ["googleapiclient.discovery", "simpleaudio", "dotenv", "tqdm", "yt_dlp", "moviepy.editor"]
 YOUTUBE_KEY = ""
 
 for module in REQUIRED_MODULES:
@@ -23,7 +23,7 @@ import simpleaudio as sa
 import dotenv as denv
 import tqdm
 import yt_dlp
-from pydub import AudioSegment
+from moviepy.editor import AudioFileClip
 
 print("All modules imported successfully.")
 
@@ -71,14 +71,18 @@ ydl_opts = {
     'no_warnings': True
 }
 
-playlist_id = i.split("list=")[-1]
+playlist_id = i.split("list=")[-1].split("&")[0]
+print(playlist_id)
 
 with yt_dlp.YoutubeDL(ydl_opts) as ydl: # type: ignore
     ydl.download([i])
 print("Download completed successfully.")
-title = yAPI.playlists().list(part="snippet,contentDetails",id=playlist_id).execute()["Items"][0]["snippet"]["title"]
+os.system("cls" if os.name == "nt" else "clear")
+title = yAPI.playlists().list(part="snippet,contentDetails",id=playlist_id).execute()["items"][0]["snippet"]["title"]
 for file in os.listdir(f"data/playlists/{title}/"):
     if file.endswith(".webm"):
-        audio = AudioSegment.from_file(f"data/playlists/{title}/{file}")
-        audio.export(f"data/playlists/{title}/{file.rsplit('.', 1)[0]}.mp3", format="mp3")
-        os.remove(f"data/playlists/{title}/{file}")
+        input_path = f"data/playlists/{title}/{file}"
+        output_path = f"data/playlists/{title}/{os.path.splitext(file)[0]}.mp3"
+        AudioFileClip(input_path).write_audiofile(output_path, codec="mp3", verbose=False, logger=None)
+        os.remove(input_path)
+print("Conversion to MP3 completed successfully.")
