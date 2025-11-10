@@ -3,3 +3,4 @@ python-dotenv
 simpleaudio
 tqdm
 yt-dlp
+pydub
