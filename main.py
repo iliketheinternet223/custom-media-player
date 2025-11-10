@@ -1,3 +1,4 @@
+# i wish for a relationship with as much love as my disgruntlement towards ffmpeg
 import os
 import importlib
 import sys
@@ -80,7 +81,7 @@ print("Download completed successfully.")
 os.system("cls" if os.name == "nt" else "clear")
 title = yAPI.playlists().list(part="snippet,contentDetails",id=playlist_id).execute()["items"][0]["snippet"]["title"]
 for file in os.listdir(f"data/playlists/{title}/"):
-    if file.endswith(".mp4"):
+    if file.endswith(".mp4") or file.endswith(".webm"):
         input_path = f"data/playlists/{title}/{file}"
         output_path = f"data/playlists/{title}/{os.path.splitext(file)[0]}.{filetype}"
         AudioFileClip(input_path).write_audiofile(output_path, codec="mp3", verbose=False, logger=None)
