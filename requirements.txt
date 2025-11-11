@@ -3,4 +3,7 @@ python-dotenv
 simpleaudio
 tqdm
 yt-dlp
+pygame
+keyboard
 moviepy
+numpy

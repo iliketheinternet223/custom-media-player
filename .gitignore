@@ -1,3 +1,5 @@
 .env
 data/Gamer.txt
 data/playlists/*
+data/single_media/*
+.vscode/
