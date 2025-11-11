@@ -1,5 +1,5 @@
 SETUP GUIDE
-1. Go to https://console.cloud.google.com/welcome?project=mediaplayer-477500
+1. Go to https://console.cloud.google.com/welcome
 2. Make a project on the top left corner
 3. Click the 3 dashes in the top left corner 
 4. Click "APIs & Services" on the side dashes.
